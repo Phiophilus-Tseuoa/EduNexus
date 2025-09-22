@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using EduNexusApp.Shared.Models;
+using EduNexusApp.API.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace EduNexusApp.API.Controllers
 {
@@ -7,25 +9,33 @@ namespace EduNexusApp.API.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        // Temporary in-memory store
-        private static readonly List<User> Users = new();
+        private readonly EduNexusDbContext _context;
+
+        public UserController(EduNexusDbContext context)
+        {
+            _context = context;
+        }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] User user)
+        public async Task<IActionResult> Login([FromBody] User user)
         {
-            var existingUser = Users.FirstOrDefault(u => u.Email == user.Email);
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Email == user.Email);
+
             if (existingUser != null)
                 return Ok(existingUser);
 
             user.Id = Guid.NewGuid();
-            Users.Add(user);
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
             return Ok(user);
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetUser(Guid id)
+        public async Task<IActionResult> GetUser(Guid id)
         {
-            var user = Users.FirstOrDefault(u => u.Id == id);
+            var user = await _context.Users.FindAsync(id);
             return user == null ? NotFound() : Ok(user);
         }
     }

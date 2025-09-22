@@ -10,14 +10,10 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyMetadataAttribute("Microsoft.Maui.ApplicationModel.AppInfo.PackageName", "com.companyname.edunexusapp")]
-[assembly: System.Reflection.AssemblyMetadataAttribute("Microsoft.Maui.ApplicationModel.AppInfo.PublisherName", "User Name")]
-[assembly: System.Reflection.AssemblyMetadataAttribute("Microsoft.Maui.ApplicationModel.AppInfo.Name", "EduNexusApp")]
-[assembly: System.Reflection.AssemblyMetadataAttribute("Microsoft.Maui.ApplicationModel.AppInfo.Version", "1.0.0.1")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("EduNexusApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+5d3f970599a731564efb8927f1486f43493a217a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4bf78b16fe1a3fbc75c2263b6b977127a84700b7")]
 [assembly: System.Reflection.AssemblyProductAttribute("EduNexusApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EduNexusApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
