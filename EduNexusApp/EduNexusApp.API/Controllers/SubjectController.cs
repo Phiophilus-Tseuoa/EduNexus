@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using EduNexusApp.API.Data;
 using EduNexusApp.Shared.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace EduNexusApp.API.Controllers
 {
@@ -7,20 +9,34 @@ namespace EduNexusApp.API.Controllers
     [Route("api/[controller]")]
     public class SubjectController : ControllerBase
     {
-        private static readonly List<Subject> Subjects = new();
+        private readonly EduNexusDbContext _context;
+
+        public SubjectController(EduNexusDbContext context)
+        {
+            _context = context;
+        }
 
         [HttpPost]
-        public IActionResult CreateSubject([FromBody] Subject subject)
+        public async Task<IActionResult> CreateSubject([FromBody] Subject subject)
         {
             subject.Id = Guid.NewGuid();
-            Subjects.Add(subject);
+            _context.Subjects.Add(subject);
+            await _context.SaveChangesAsync();
             return Ok(subject);
         }
 
         [HttpGet]
-        public IActionResult GetSubjects()
+        public async Task<IActionResult> GetSubjects()
         {
-            return Ok(Subjects);
+            var subjects = await _context.Subjects.ToListAsync();
+            return Ok(subjects);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSubjectById(Guid id)
+        {
+            var subject = await _context.Subjects.FindAsync(id);
+            return subject == null ? NotFound() : Ok(subject);
         }
     }
 }

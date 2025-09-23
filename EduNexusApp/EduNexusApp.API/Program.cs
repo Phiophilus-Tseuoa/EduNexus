@@ -13,5 +13,11 @@ builder.Services.AddDbContext<EduNexusDbContext>(options =>
 builder.Services.AddControllers();
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<EduNexusDbContext>();
+    DbInitializer.Seed(context);
+}
+
 app.MapControllers();
 app.Run();

@@ -1,27 +1,45 @@
 using Microsoft.AspNetCore.Mvc;
+using EduNexusApp.API.Data;
 using EduNexusApp.Shared.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace EduNexusApp.API.Controllers
+namespace EduAwarenessAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class SlideController : ControllerBase
     {
-        private static readonly List<Slide> Slides = new();
+        private readonly EduNexusDbContext _context;
+
+        public SlideController(EduNexusDbContext context)
+        {
+            _context = context;
+        }
 
         [HttpPost]
-        public IActionResult UploadSlide([FromBody] Slide slide)
+        public async Task<IActionResult> UploadSlide([FromBody] Slide slide)
         {
             slide.Id = Guid.NewGuid();
-            Slides.Add(slide);
+            _context.Slides.Add(slide);
+            await _context.SaveChangesAsync();
             return Ok(slide);
         }
 
         [HttpGet("subject/{subjectId}")]
-        public IActionResult GetSlidesBySubject(Guid subjectId)
+        public async Task<IActionResult> GetSlidesBySubject(Guid subjectId)
         {
-            var subjectSlides = Slides.Where(s => s.SubjectId == subjectId).ToList();
-            return Ok(subjectSlides);
+            var slides = await _context.Slides
+                .Where(s => s.SubjectId == subjectId)
+                .ToListAsync();
+
+            return Ok(slides);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetSlideById(Guid id)
+        {
+            var slide = await _context.Slides.FindAsync(id);
+            return slide == null ? NotFound() : Ok(slide);
         }
     }
 }

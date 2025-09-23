@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EduNexusApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+4bf78b16fe1a3fbc75c2263b6b977127a84700b7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+f865ad647e737dfbc2010ba099f1d854c2d7aa9e")]
 [assembly: System.Reflection.AssemblyProductAttribute("EduNexusApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EduNexusApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

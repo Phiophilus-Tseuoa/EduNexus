@@ -6,5 +6,6 @@ namespace EduNexusApp.Shared.Models
         public string Title { get; set; }
         public string FileUrl { get; set; }
         public Guid SubjectId { get; set; }
+        public string Content { get; set; }
     }
 }
