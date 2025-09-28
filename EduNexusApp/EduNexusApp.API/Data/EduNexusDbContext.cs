@@ -12,7 +12,7 @@ namespace EduNexusApp.API.Data
         public DbSet<Slide> Slides { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
     }
-    public static class DbInitializer
+public static class DbInitializer
 {
     public static void Seed(EduNexusDbContext context)
     {
@@ -25,7 +25,7 @@ namespace EduNexusApp.API.Data
             Description = "Learn about climate change, pollution, and sustainability."
         };
 
-        var slide1 = new Slide
+        var slide = new Slide
         {
             Id = Guid.NewGuid(),
             SubjectId = subject.Id,
@@ -33,16 +33,27 @@ namespace EduNexusApp.API.Data
             Content = "Climate change refers to long-term shifts in temperatures and weather patterns."
         };
 
-        var slide2 = new Slide
+        var quiz1 = new Quiz
         {
             Id = Guid.NewGuid(),
-            SubjectId = subject.Id,
-            Title = "Causes of Pollution",
-            Content = "Pollution is caused by industrial waste, vehicle emissions, and plastic usage."
+            SlideId = slide.Id,
+            Question = "What is a major cause of climate change?",
+            Options = new List<string> { "Deforestation", "Recycling", "Rainfall", "Wind turbines" },
+            CorrectOptionIndex = 0
+        };
+
+        var quiz2 = new Quiz
+        {
+            Id = Guid.NewGuid(),
+            SlideId = slide.Id,
+            Question = "Which gas contributes most to global warming?",
+            Options = new List<string> { "Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen" },
+            CorrectOptionIndex = 1
         };
 
         context.Subjects.Add(subject);
-        context.Slides.AddRange(slide1, slide2);
+        context.Slides.Add(slide);
+        context.Quizzes.AddRange(quiz1, quiz2);
         context.SaveChanges();
     }
 }
