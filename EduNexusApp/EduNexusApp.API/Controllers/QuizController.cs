@@ -1,33 +1,44 @@
 using Microsoft.AspNetCore.Mvc;
+using EduNexusApp.API.Data;
 using EduNexusApp.Shared.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace EduNexusApp.API.Controllers
+namespace EduAwarenessAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class QuizController : ControllerBase
     {
-        private static readonly List<Quiz> Quizzes = new();
+        private readonly EduNexusDbContext _context;
+
+        public QuizController(EduNexusDbContext context)
+        {
+            _context = context;
+        }
 
         [HttpPost]
-        public IActionResult CreateQuiz([FromBody] Quiz quiz)
+        public async Task<IActionResult> CreateQuiz([FromBody] Quiz quiz)
         {
             quiz.Id = Guid.NewGuid();
-            Quizzes.Add(quiz);
+            _context.Quizzes.Add(quiz);
+            await _context.SaveChangesAsync();
             return Ok(quiz);
         }
 
         [HttpGet("slide/{slideId}")]
-        public IActionResult GetQuizzesBySlide(Guid slideId)
+        public async Task<IActionResult> GetQuizzesBySlide(Guid slideId)
         {
-            var slideQuizzes = Quizzes.Where(q => q.SlideId == slideId).ToList();
-            return Ok(slideQuizzes);
+            var quizzes = await _context.Quizzes
+                .Where(q => q.SlideId == slideId)
+                .ToListAsync();
+
+            return Ok(quizzes);
         }
 
         [HttpPost("submit")]
-        public IActionResult SubmitAnswer([FromBody] QuizAnswer answer)
+        public async Task<IActionResult> SubmitAnswer([FromBody] QuizAnswer answer)
         {
-            var quiz = Quizzes.FirstOrDefault(q => q.Id == answer.QuizId);
+            var quiz = await _context.Quizzes.FindAsync(answer.QuizId);
             if (quiz == null)
                 return NotFound("Quiz not found");
 
